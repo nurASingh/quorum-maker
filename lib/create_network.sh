@@ -60,24 +60,13 @@ function copyScripts(){
 function generateEnode(){
     bootnode -genkey nodekey
     nodekey=$(cat nodekey)
-	bootnode -nodekey nodekey 2>enode.txt &
-	pid=$!
-	sleep 5
-	kill -9 $pid
-	wait $pid 2> /dev/null
-	re="enode:.*@"
-	enode=$(cat enode.txt)
-    
-    if [[ $enode =~ $re ]];
-    	then
-        Enode=${BASH_REMATCH[0]};
-    fi
-    
+    bootnode -nodekey nodekey --writeaddress >enode.txt
+    enode=$(cat enode.txt)
+    Enode="enode://$enode@"
     cp nodekey ${mNode}/node/qdata/geth/.
-    cp lib/master/static-nodes_template.json ${mNode}/node/qdata/static-nodes.json
+    cp lib/master/static-nodes_template.json  ${mNode}/node/qdata/static-nodes.json
     PATTERN="s|#eNode#|${Enode}|g"
     sed -i $PATTERN ${mNode}/node/qdata/static-nodes.json
-
     rm enode.txt
     rm nodekey
 }
