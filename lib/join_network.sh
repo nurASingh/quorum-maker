@@ -122,20 +122,11 @@ function createInitNodeScript(){
 function generateEnode(){
     bootnode -genkey nodekey
     nodekey=$(cat nodekey)
-    bootnode -nodekey nodekey 2>enode.txt &
-    pid=$!
-    sleep 5
-    kill -9 $pid
-    wait $pid 2> /dev/null
-    re="enode:.*@"
+    bootnode -nodekey nodekey --writeaddress >enode.txt
     enode=$(cat enode.txt)
-    
-    if [[ $enode =~ $re ]];
-        then
-        Enode=${BASH_REMATCH[0]};
-    fi
-    disc='?discport=0&raftport='
-    Enode1=$Enode$pCurrentIp:$wPort$disc$raPort 
+    Enode="enode://$enode@"
+    disc='?discport=22001&raftport='
+    Enode1=$Enode$pCurrentIp:$wPort$disc$raPort
     echo $Enode1 > ${sNode}/node/enode.txt
     cp nodekey ${sNode}/node/qdata/geth/.
     rm enode.txt
