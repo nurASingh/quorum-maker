@@ -7,7 +7,8 @@
     "eip155Block": 0,
     "eip150Hash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "eip158Block": 1,
-    "isQuorum": true
+    "isQuorum": true,
+    "txnSizeLimit": 128
   },
   "alloc"      : {
     #AccountBalance#
